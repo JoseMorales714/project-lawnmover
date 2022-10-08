@@ -112,7 +112,18 @@ public:
   // Return true when this disk_state is fully sorted, with all light disks on
   // the left (low indices) and all dark disks on the right (high indices).
   bool is_sorted() const {
-      
+      for(size_t i = 0; i < total_count(); i++){
+          for(size_t j = i; j < total_count() - 1; j++){
+              if(_colors[j] == DISK_DARK and _colors[j+1] == DISK_LIGHT){
+                  return false;
+              }
+          }
+          for (size_t k = total_count() - 1; k > 0; k--){
+              if(_colors[k] == DISK_LIGHT and _colors[k-1] == DISK_DARK){
+                  return false;
+              }
+          }
+      }
       return true;
   }
 };
@@ -144,18 +155,36 @@ public:
 
 // Algorithm that sorts disks using the alternate algorithm.
 sorted_disks sort_alternate(const disk_state& before) {
-	int numOfSwap = 0;                                                                      //record # of step swap
- 
-          }
+  int numOfSwap = 0;
+    for(size_t i = 0; i < before.total_count(); i++){
+        for(size_t j = i; j < before.total_count() - 1; j+=2){
+            if(before.get(j) == DISK_DARK and before.get(j+1) == DISK_LIGHT){
+                const_cast <disk_state&> (before).swap(j);
+                numOfSwap++;
+            }
+        }
+    }
 
-  return sorted_disks(disk_state(state), numOfSwap);
+    return sorted_disks(before, numOfSwap);
 }
 
 
 // Algorithm that sorts disks using the lawnmower algorithm.
 sorted_disks sort_lawnmower(const disk_state& before) {
-  	
-	  }
-
-  return sorted_disks(disk_state(state), numOfSwap);
+  int numOfSwap = 0;
+    for(size_t i = 0; i < before.total_count(); i++){
+        for(size_t j = i; j < before.total_count() - 1; j++){
+            if(before.get(j) == DISK_DARK and before.get(j+1) == DISK_LIGHT){
+                const_cast <disk_state&> (before).swap(j);
+                numOfSwap++;
+            }
+        }
+        for (size_t k = before.total_count() - 1; k > 0; k--){
+            if(before.get(k) == DISK_LIGHT and before.get(k - 1) == DISK_DARK){
+                const_cast <disk_state&> (before).swap(k - 1);
+                numOfSwap++;
+            }
+        }
+    }
+    return sorted_disks(before, numOfSwap);
 }
