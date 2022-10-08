@@ -157,7 +157,7 @@ public:
 sorted_disks sort_alternate(const disk_state& before) {
   int numOfSwap = 0;
   disk_state state = before;
-    for(size_t i = 0; i < state.total_count(); ++i){
+    for(size_t i = 0; i < state.dark_count(); ++i){
         for(size_t j = 0; j < state.total_count() - 1; ++j){
             if(state.get(j) == DISK_DARK && state.get(j+1) == DISK_LIGHT){
                     state.swap(j);
